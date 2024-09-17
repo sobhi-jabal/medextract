@@ -1,0 +1,106 @@
+# default_config.yaml
+
+# File paths
+file_paths:
+  input: "data/input/input.csv"
+  figures: "data/output/figures/"
+  results: "data/output/results/"
+  metrics: "data/output/results/metrics.csv"
+  log: "data/output/results/log.csv"
+
+# Processing options
+processing:
+  batch_size: 100
+  process_all: false
+  verbose: false
+  timeout_duration: 100
+  csv_save_frequency: 10
+
+# RAG settings
+rag:
+  enabled: true
+  chunk_size: 70
+  chunk_overlap: 20
+
+# Model settings
+models:
+  llm_models:
+    - "llama3:latest"
+  bit_quantization: "low"
+
+# Prompt settings
+prompting:
+  simple_prompting: true
+  fewshots_method: true
+  fewshots_with_NR_method: false
+  fewshots_with_NR_extended_method: false
+
+# Output settings
+output:
+  json_format: true
+
+# Sampling parameters
+sampling:
+  temperatures: [0.1]
+  top_ks: [40]
+  top_ps: [0.9]
+
+# Embedding models
+embedding_models:
+  - "gte-large"
+
+# Retriever settings
+retriever:
+  types:
+    - "vectorstore"
+  use_reranker: true
+  reranker_model_name: "BAAI/bge-reranker-v2-m3"
+  reranker_top_n: 2
+
+# Evaluation settings
+evaluation:
+  target_variable: "BTFU Score (Updated)"
+  valid_values: ["0", "1", "1a", "1b", "2", "2a", "2b", "3", "3a", "3b", "3c", "4", "NR"]
+
+# Continuation options
+continue_option: "next"
+
+# Placeholder image settings
+placeholder_image:
+  width: 400
+  height: 320
+
+# Advanced LLM settings
+advanced_llm:
+  keep_alive: 0
+  num_predict: null
+  mirostat_tau: null
+
+# Few-shot examples and prompts
+few_shot_examples:
+  example1:
+    input: "Sample input 1"
+    output: "Sample output 1"
+
+system_prompts:
+  simple: "Extract the {target_variable} from the given medical report. If not found, return 'NR'."
+  complex: "You are an AI assistant specialized in extracting {target_variable} from medical reports. Your task is to carefully analyze the given report and extract the {target_variable}. If the information is not present, return 'NR'. Ensure your response is accurate and concise."
+
+# Metrics to calculate
+metrics:
+  - "accuracy"
+  - "precision"
+  - "recall"
+  - "f1_score"
+
+# Column name format
+column_name_format: "{target_variable}_model_({model})_rag_enabled_({rag})_embeddings_({embeddings})_retriever_({retriever})_reranker_({reranker})_simple_prompting_({simple})_fewshots_method_({fewshots})_fewshots_with_NR_method_({nr})_fewshots_with_NR_extended_({nr_extended})_json_({json})_temp_({temp})_top_k_({top_k})_top_p_({top_p})"
+
+# Library versions
+library_versions:
+  langchain: "0.0.184"
+  pandas: "1.3.3"
+  numpy: "1.21.2"
+
+# Benchmarking
+run_benchmark: false
