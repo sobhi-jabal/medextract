@@ -69,7 +69,7 @@ To run MedExtract using Docker:
 
 ## Contributing
 
-We welcome contributions to MedExtract! Please see our [Contributing Guide](CONTRIBUTING.md) for more details.
+We welcome contributions to MedExtract! Please see our Contributing Guide for more details.
 
 ## License
 
