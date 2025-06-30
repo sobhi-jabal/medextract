@@ -24,17 +24,19 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain.retrievers import ContextualCompressionRetriever
 from langchain_community.document_compressors.openvino_rerank import OpenVINOReranker
+import torch
 import ollama
 from ollama import Options
 from sentence_transformers import CrossEncoder
 from langchain.retrievers.document_compressors.base import BaseDocumentCompressor
 from typing import Sequence, Optional
 from langchain.schema import Document
+from langchain.callbacks.base import Callbacks
 
 class BgeRerank(BaseDocumentCompressor):
     model_name: str = 'BAAI/bge-reranker-v2-m3'
     top_n: int = 2
-    model: CrossEncoder = CrossEncoder(model_name, device="cuda")
+    model: CrossEncoder = CrossEncoder(model_name, device="cuda" if torch.cuda.is_available() else "cpu")
 
     def bge_rerank(self, query, docs):
         model_inputs = [[query, doc] for doc in docs]

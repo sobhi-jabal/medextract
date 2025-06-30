@@ -1,0 +1,90 @@
+services:
+  # Ollama service for running LLMs locally
+  ollama:
+    image: ollama/ollama:latest
+    container_name: medextract-ollama
+    volumes:
+      - ollama_data:/root/.ollama
+    ports:
+      - "11434:11434"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Backend API service
+  backend:
+    build:
+      context: ./medextract-ui/backend
+      dockerfile: Dockerfile.simplified
+    container_name: medextract-backend
+    depends_on:
+      - ollama
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+      - PORT=8000
+      - HOST=0.0.0.0
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./data:/app/data
+      - ./output:/app/output
+      - ./checkpoints:/app/checkpoints
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Frontend UI service
+  frontend:
+    build:
+      context: ./medextract-ui/frontend
+      dockerfile: Dockerfile.simplified
+    container_name: medextract-frontend
+    depends_on:
+      - backend
+    environment:
+      - NEXT_PUBLIC_API_URL=http://backend:8000
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
+  # Optional: Model puller service to pre-download models
+  model-puller:
+    image: ollama/ollama:latest
+    container_name: medextract-model-puller
+    depends_on:
+      - ollama
+    volumes:
+      - ollama_data:/root/.ollama
+    entrypoint: >
+      sh -c "
+        echo 'Waiting for Ollama to be ready...';
+        sleep 10;
+        echo 'Pulling default models...';
+        ollama pull phi4:latest || true;
+        ollama pull llama3.2:3b || true;
+        echo 'Models pulled successfully';
+        exit 0
+      "
+    restart: "no"
+
+volumes:
+  ollama_data:
+    name: medextract_ollama_data
+
+networks:
+  default:
+    name: medextract_network

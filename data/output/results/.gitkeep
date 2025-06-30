@@ -1,0 +1,2 @@
+# This file ensures the data/output/results directory is tracked by git
+# Processing results and metrics will be saved here

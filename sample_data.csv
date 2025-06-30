@@ -1,0 +1,6 @@
+Report Text,Ground Truth
+"Patient presents with chest pain and shortness of breath. Assessment shows BT-RADS 3 finding with stable appearance. No known allergies to medications.","BT-RADS 3"
+"Follow-up imaging demonstrates BT-RADS 1 with no suspicious findings. Patient tolerating treatment well.","BT-RADS 1"
+"New concerning lesion identified with BT-RADS 4 classification requiring biopsy. Patient counseled on next steps.","BT-RADS 4"
+"Routine screening mammogram shows BT-RADS 2 benign findings. Recommend annual follow-up.","BT-RADS 2"
+"Patient denies any symptoms. Review of systems negative. BT-RADS 0 - needs additional imaging.","BT-RADS 0"

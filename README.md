@@ -1,80 +1,104 @@
-# MedExtract
+# MedExtract - Medical Report Information Extraction
 
-MedExtract is a clinical datapoint extraction system that uses Large Language Models (LLMs) and Retrieval-Augmented Generation (RAG) to extract specific information from medical reports.
+A comprehensive toolkit for extracting structured information from unstructured medical reports using LLMs.
 
-## Features
+## Directory Structure
 
-- Supports multiple LLM models (llama3, mistral)
-- Implements RAG with various embedding models and retriever types
-- Configurable processing options and evaluation metrics
-- Supports few-shot learning and prompt engineering
-- Benchmarking capabilities for model comparison
+```
+medextract/
+├── medextract-ui/              # NEW: Web-based UI application (actively developed)
+│   ├── frontend/              # React/Next.js frontend
+│   ├── backend/               # FastAPI backend with unified extraction pipeline
+│   ├── docker-compose.yml     # Docker configuration for the UI app
+│   └── run_test.sh           # Quick test script (no LLM required)
+│
+├── medextract-ui_backup_2/     # BACKUP: Original job-based architecture (untouched)
+│
+├── original_examples/          # Example extraction scripts
+│   ├── ds_btrads_c1_6_NO_rag.py        # BT-RADS extraction with optional RAG
+│   ├── llm_updated_allbatches_*.py      # Indications/impressions extraction
+│   └── nih_ai_rad_all.py               # NIH grant analysis extraction
+│
+├── deployment/                 # Docker deployment configurations
+│   ├── docker-compose.yml     # Main Docker configuration
+│   ├── docker-compose.cpu.yml # CPU-only configuration
+│   ├── deploy.sh              # Interactive deployment script
+│   ├── quick_start.sh         # Quick start script
+│   └── check_setup.sh         # System requirements checker
+│
+├── docs/                       # Documentation
+│   ├── DOCKER_README.md       # Docker deployment guide
+│   └── QUICK_START.md         # Quick start guide
+│
+├── medextract.py              # Original CLI tool
+├── requirements.txt           # Python dependencies for CLI
+├── setup.py                   # Package setup for CLI
+└── config/                    # Configuration files
+    ├── config.yaml
+    └── default_config.yaml
+```
 
-## Installation
+## Quick Start
 
-1. Clone the repository:
-   ```
-   git clone https://github.com/yourusername/medextract.git
-   cd medextract
-   ```
+### Option 1: Test the Web UI (Recommended)
+```bash
+cd medextract-ui
+./run_test.sh
+```
+Then open http://localhost:3000 in your browser.
 
-2. Create a virtual environment and activate it:
-   ```
-   python -m venv venv
-   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
-   ```
+### Option 2: Full Deployment with LLM
+```bash
+cd deployment
+./deploy.sh
+```
 
-3. Install the required dependencies:
-   ```
-   pip install -r requirements.txt
-   ```
+### Option 3: Use Original CLI
+```bash
+pip install -r requirements.txt
+python medextract.py --help
+```
 
-## Usage
+## Components
 
-1. Place your input CSV file in the `data/input/` directory.
+### medextract-ui/ (New Web Application)
+- **Purpose**: Modern web interface for medical text extraction
+- **Features**:
+  - Drag-and-drop file upload
+  - Configure extraction parameters
+  - Real-time progress tracking
+  - Export results as CSV/Excel
+  - Support for RAG, few-shot examples, and multiple LLM models
+- **Status**: Actively developed, replaces job-based architecture with direct extraction
 
-2. Modify the `config/config.yaml` file to suit your needs or use the default configuration.
+### original_examples/
+- **Purpose**: Reference implementations for different extraction tasks
+- **Contents**:
+  - BT-RADS assessment extraction
+  - Medical report indications/impressions extraction
+  - NIH grant analysis extraction
+- **Usage**: These scripts demonstrate various extraction patterns and can be run standalone
 
-3. Run the main script:
-   ```
-   python medextract.py --config config/config.yaml
-   ```
+### deployment/
+- **Purpose**: Docker-based deployment configurations
+- **Features**:
+  - Automatic GPU/CPU detection
+  - Ollama integration for local LLM inference
+  - One-command deployment
+- **Usage**: Run `./deploy.sh` from the deployment directory
 
-4. Results will be saved in the `data/output/results/` directory, and figures in the `data/output/figures/` directory.
+## Development Status
 
-## Configuration
+- **Active Development**: `medextract-ui/` - The new web-based extraction tool
+- **Stable**: Original CLI tool (`medextract.py`) and example scripts
+- **Archived**: `medextract-ui_backup_2/` - Original job-based architecture
 
-The `config/config.yaml` file contains all the configurable parameters for the pipeline. You can modify this file to change the behavior of the system, including:
+## Getting Help
 
-- Input/output file paths
-- Processing options
-- RAG settings
-- Model selection
-- Prompt engineering options
-- Evaluation settings
-
-## Docker
-
-To run MedExtract using Docker:
-
-1. Build the Docker image:
-   ```
-   docker build -t medextract .
-   ```
-
-2. Run the container:
-   ```
-   docker run -v $(pwd)/data:/app/data medextract
-   ```
-
-## Contributing
-
-We welcome contributions to MedExtract! Please see our Contributing Guide for more details.
+1. Check the documentation in `docs/`
+2. For UI issues, see `medextract-ui/README.md`
+3. For deployment issues, see `deployment/check_setup.sh`
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Contact
-
-If you have any questions or feedback, please open an issue on this GitHub repository.
+See LICENSE file for details.

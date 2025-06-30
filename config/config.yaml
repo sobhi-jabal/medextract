@@ -1,4 +1,7 @@
-# default_config.yaml
+# config.yaml - Override default_config.yaml settings as needed
+
+# Set to false to use this configuration instead of default_config.yaml
+use_default_config: false
 
 # File paths
 file_paths:
@@ -26,7 +29,7 @@ rag:
 models:
   llm_models:
     - "llama3:latest"
-  bit_quantization: "high"
+  bit_quantization: "low"
 
 # Prompt settings
 prompting:
